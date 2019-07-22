@@ -92,12 +92,14 @@ public class DigitalRootCruelScript : MonoBehaviour {
             {
                 Debug.LogFormat("[Cruel Digital Root #{0}] Correct button pressed! Module disarmed!", moduleId);
                 audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.CorrectChime, transform);
+                moduleSolved = true;
                 GetComponent<KMBombModule>().HandlePass();
             }
             else if (digital == false && pressed == nobutton)
             {
                 Debug.LogFormat("[Cruel Digital Root #{0}] Correct button pressed! Module disarmed!", moduleId);
                 audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.CorrectChime, transform);
+                moduleSolved = true;
                 GetComponent<KMBombModule>().HandlePass();
             }
             else
