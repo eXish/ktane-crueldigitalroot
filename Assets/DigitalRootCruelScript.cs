@@ -88,12 +88,31 @@ public class DigitalRootCruelScript : MonoBehaviour {
         {
             pressed.AddInteractionPunch(0.25f);
             audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
-            if(digital == true && pressed == yesbutton)
+            if(unicorn() && pressed == yesbutton)
             {
                 Debug.LogFormat("[Cruel Digital Root #{0}] Correct button pressed! Module disarmed!", moduleId);
                 audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.CorrectChime, transform);
                 moduleSolved = true;
                 GetComponent<KMBombModule>().HandlePass();
+            }
+            else if (unicorn() && pressed == nobutton)
+            {
+                Debug.LogFormat("[Cruel Digital Root #{0}] Pressing the 'no' button was incorrect! Resetting module...", moduleId);
+                GetComponent<KMBombModule>().HandleStrike();
+                Start();
+            }
+            else if(digital == true && pressed == yesbutton)
+            {
+                Debug.LogFormat("[Cruel Digital Root #{0}] Correct button pressed! Module disarmed!", moduleId);
+                audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.CorrectChime, transform);
+                moduleSolved = true;
+                GetComponent<KMBombModule>().HandlePass();
+            }
+            else if (digital == true && pressed == nobutton)
+            {
+                Debug.LogFormat("[Cruel Digital Root #{0}] Pressing the 'no' button was incorrect! Resetting module...", moduleId);
+                GetComponent<KMBombModule>().HandleStrike();
+                Start();
             }
             else if (digital == false && pressed == nobutton)
             {
@@ -102,9 +121,9 @@ public class DigitalRootCruelScript : MonoBehaviour {
                 moduleSolved = true;
                 GetComponent<KMBombModule>().HandlePass();
             }
-            else
+            else if (digital == false && pressed == yesbutton)
             {
-                Debug.LogFormat("[Cruel Digital Root #{0}] That button was incorrect! Resetting module...", moduleId);
+                Debug.LogFormat("[Cruel Digital Root #{0}] Pressing the 'yes' button was incorrect! Resetting module...", moduleId);
                 GetComponent<KMBombModule>().HandleStrike();
                 Start();
             }
