@@ -1,9 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using KModkit;
-using System;
 using System.Text.RegularExpressions;
 
 public class DigitalRootCruelScript : MonoBehaviour {
@@ -51,6 +48,14 @@ public class DigitalRootCruelScript : MonoBehaviour {
             KMSelectable pressed = obj;
             pressed.OnInteract += delegate () { PressButton(pressed); return false; };
         }
+        numDisplay1.SetActive(false);
+        numDisplay2.SetActive(false);
+        scrDisplay1.SetActive(false);
+        scrDisplay2.SetActive(false);
+        scrDisplay3.SetActive(false);
+        scrDisplay4.SetActive(false);
+        scrDisplay5.SetActive(false);
+        scrDisplay6.SetActive(false);
     }
 
     void Start () {
@@ -80,6 +85,19 @@ public class DigitalRootCruelScript : MonoBehaviour {
             Debug.LogFormat("[Cruel Digital Root #{0}] Lit SIG and no 5 is present in the set of top numbers! The 'yes' button must be pressed!", moduleId);
         }
         getCorrectButtons();
+        GetComponent<KMBombModule>().OnActivate += OnActivate;
+    }
+
+    void OnActivate()
+    {
+        numDisplay1.SetActive(true);
+        numDisplay2.SetActive(true);
+        scrDisplay1.SetActive(true);
+        scrDisplay2.SetActive(true);
+        scrDisplay3.SetActive(true);
+        scrDisplay4.SetActive(true);
+        scrDisplay5.SetActive(true);
+        scrDisplay6.SetActive(true);
     }
 
     void PressButton(KMSelectable pressed)
@@ -87,7 +105,7 @@ public class DigitalRootCruelScript : MonoBehaviour {
         if(moduleSolved != true)
         {
             pressed.AddInteractionPunch(0.25f);
-            audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
+            audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, pressed.transform);
             if(unicorn() && pressed == yesbutton)
             {
                 Debug.LogFormat("[Cruel Digital Root #{0}] Correct button pressed! Module disarmed!", moduleId);
@@ -136,7 +154,7 @@ public class DigitalRootCruelScript : MonoBehaviour {
         string nums2 = "[Cruel Digital Root #{0}] Numbers from bottom 2 displays from left to right: ";
         for (int i = 0; i < 8; i++)
         {
-            int dec = UnityEngine.Random.Range(0, 10);
+            int dec = Random.Range(0, 10);
             switch (i) {
                 case 0: numDisplay1.GetComponent<TextMesh>().text = "" + dec; nums2 += (dec+" "); bottomTotal += dec; break;
                 case 1: numDisplay2.GetComponent<TextMesh>().text = "" + dec; nums2 += (""+dec); bottomTotal += dec; break;
@@ -154,13 +172,13 @@ public class DigitalRootCruelScript : MonoBehaviour {
 
     private void getCorrectButtons()
     {
-        int rand = UnityEngine.Random.Range(0, 2);
+        int rand = Random.Range(0, 2);
         if(rand == 0)
         {
             yesbutton = buttons[0];
             nobutton = buttons[1];
-            int yes = UnityEngine.Random.Range(0, 12);
-            int no = UnityEngine.Random.Range(0, 12);
+            int yes = Random.Range(0, 12);
+            int no = Random.Range(0, 12);
             if(yes == 0)
             {
                 but1.GetComponent<TextMesh>().color = colors[0];
@@ -319,8 +337,8 @@ public class DigitalRootCruelScript : MonoBehaviour {
         {
             yesbutton = buttons[1];
             nobutton = buttons[0];
-            int yes = UnityEngine.Random.Range(0, 12);
-            int no = UnityEngine.Random.Range(0, 12);
+            int yes = Random.Range(0, 12);
+            int no = Random.Range(0, 12);
             if (yes == 0)
             {
                 but2.GetComponent<TextMesh>().color = colors[0];
@@ -515,7 +533,6 @@ public class DigitalRootCruelScript : MonoBehaviour {
         string[] parameters = command.Split(' ');
         if (Regex.IsMatch(parameters[0], @"^\s*press\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {
-
             if (parameters.Length == 2)
             {
                 if (parameters[1].EqualsIgnoreCase("left") || parameters[1].EqualsIgnoreCase("l"))
@@ -531,5 +548,22 @@ public class DigitalRootCruelScript : MonoBehaviour {
             }
             yield break;
         }
+    }
+
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        if (unicorn())
+        {
+            yesbutton.OnInteract();
+        }
+        else if (digital == true)
+        {
+            yesbutton.OnInteract();
+        }
+        else if (digital == false)
+        {
+            nobutton.OnInteract();
+        }
+        yield return new WaitForSeconds(0.1f);
     }
 }
