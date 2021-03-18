@@ -479,7 +479,7 @@ public class DigitalRootCruelScript : MonoBehaviour {
 
     private bool unicorn()
     {
-        if(fivepresent == false && bomb.IsIndicatorOn("SIG"))
+        if(fivepresent == true && bomb.IsIndicatorOn("SIG"))
         {
             return true;
         }
